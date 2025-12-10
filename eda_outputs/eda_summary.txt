@@ -1,0 +1,44 @@
+EDA Summary Report
+==================
+
+Dataset shape: (699761, 26)
+
+Top categories:
+category
+swimwear      100328
+outerwear     100076
+tops          100041
+dresses        99950
+lingerie       99949
+activewear     99751
+bottoms        99666
+Name: count, dtype: int64
+
+Top brands:
+brand
+ralph lauren         87978
+alexander mcqueen    87717
+jigsaw               87637
+calvin klein         87549
+tommy hilfiger       87483
+burberry             87296
+ted baker            87077
+mulberry             87024
+Name: count, dtype: int64
+
+Rating statistics (REAL):
+count    699761.000000
+mean          2.997795
+std           1.154805
+min           1.000000
+25%           1.997402
+50%           2.995561
+75%           3.996841
+max           4.999991
+Name: rating, dtype: float64
+
+Label distribution:
+Trend
+0    489832
+1    209929
+Name: count, dtype: int64

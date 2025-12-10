@@ -1,0 +1,84 @@
+=== BASIC DATA INFORMATION ===
+
+Dataset shape: (699761, 26)
+
+>>> Data Info:
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 699761 entries, 0 to 699760
+Data columns (total 26 columns):
+ #   Column                        Non-Null Count   Dtype  
+---  ------                        --------------   -----  
+ 0   price                         699761 non-null  float64
+ 1   brand                         699761 non-null  object 
+ 2   category                      699761 non-null  object 
+ 3   description                   699761 non-null  object 
+ 4   rating                        699761 non-null  float64
+ 5   review count                  699761 non-null  float64
+ 6   style attributes              699761 non-null  object 
+ 7   total sizes                   699761 non-null  object 
+ 8   size                          699761 non-null  object 
+ 9   color                         699761 non-null  object 
+ 10  purchase history              699761 non-null  object 
+ 11  age                           699761 non-null  float64
+ 12  fashion magazines             699761 non-null  object 
+ 13  fashion influencers           699761 non-null  object 
+ 14  season                        699761 non-null  object 
+ 15  time period highest purchase  699761 non-null  object 
+ 16  customer reviews              699761 non-null  object 
+ 17  social media comments         699761 non-null  object 
+ 18  feedback                      699761 non-null  object 
+ 19  rating_orig                   699761 non-null  float64
+ 20  review count_orig             699761 non-null  int64  
+ 21  price_orig                    699761 non-null  float64
+ 22  age_orig                      699761 non-null  int64  
+ 23  trend_score                   699761 non-null  float64
+ 24  Trend                         699761 non-null  int64  
+ 25  is_trending                   699761 non-null  int64  
+dtypes: float64(7), int64(4), object(15)
+memory usage: 138.8+ MB
+
+
+>>> Missing Values:
+price                           0
+brand                           0
+category                        0
+description                     0
+rating                          0
+review count                    0
+style attributes                0
+total sizes                     0
+size                            0
+color                           0
+purchase history                0
+age                             0
+fashion magazines               0
+fashion influencers             0
+season                          0
+time period highest purchase    0
+customer reviews                0
+social media comments           0
+feedback                        0
+rating_orig                     0
+review count_orig               0
+price_orig                      0
+age_orig                        0
+trend_score                     0
+Trend                           0
+is_trending                     0
+dtype: int64
+
+>>> Descriptive Statistics:
+                price         brand  category description  ...       age_orig    trend_score          Trend    is_trending
+count   699761.000000        699761    699761      699761  ...  699761.000000  699761.000000  699761.000000  699761.000000
+unique            NaN             8         7           7  ...            NaN            NaN            NaN            NaN
+top               NaN  ralph lauren  swimwear    very bad  ...            NaN            NaN            NaN            NaN
+freq              NaN         87978    100328      100441  ...            NaN            NaN            NaN            NaN
+mean         0.500069           NaN       NaN         NaN  ...      41.019557       0.499810       0.300001       0.300001
+std          0.288562           NaN       NaN         NaN  ...      13.560666       0.162285       0.458258       0.458258
+min          0.000000           NaN       NaN         NaN  ...      18.000000       0.014394       0.000000       0.000000
+25%          0.250367           NaN       NaN         NaN  ...      29.000000       0.384144       0.000000       0.000000
+50%          0.500145           NaN       NaN         NaN  ...      41.000000       0.499769       0.000000       0.000000
+75%          0.749964           NaN       NaN         NaN  ...      53.000000       0.615271       1.000000       1.000000
+max          1.000000           NaN       NaN         NaN  ...      64.000000       0.984111       1.000000       1.000000
+
+[11 rows x 26 columns]
