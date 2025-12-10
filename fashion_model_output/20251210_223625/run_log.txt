@@ -1,0 +1,46 @@
+
+ TRAINING PIPELINE START 
+
+Dataset loaded: (699761, 26)
+0:	learn: 0.8397658	test: 0.8400010	best: 0.8400010 (0)	total: 1.09s	remaining: 9m 2s
+100:	learn: 0.9898128	test: 0.9892401	best: 0.9892401 (100)	total: 1m 14s	remaining: 4m 55s
+200:	learn: 0.9939650	test: 0.9930360	best: 0.9930360 (200)	total: 2m 26s	remaining: 3m 38s
+300:	learn: 0.9953231	test: 0.9944459	best: 0.9944941 (299)	total: 3m 44s	remaining: 2m 28s
+400:	learn: 0.9960862	test: 0.9949347	best: 0.9950309 (394)	total: 4m 53s	remaining: 1m 12s
+499:	learn: 0.9966795	test: 0.9953298	best: 0.9954010 (490)	total: 6m 1s	remaining: 0us
+
+bestTest = 0.9954010389
+bestIteration = 490
+
+Shrink model to first 491 iterations.
+
+Model Evaluation:
+accuracy: 0.9972419312197667
+f1_score: 0.9954010389362817
+precision: 0.9958756496447814
+recall: 0.994926880388701
+y_proba: [1.00000000e+00 2.23189829e-09 9.68263908e-01 ... 7.30993882e-12
+ 4.57997939e-06 4.67823600e-04]
+roc_auc: 0.9999681409493336
+
+Confusion Matrix:
+ [[97794   173]
+ [  213 41773]]
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00     97967
+           1       1.00      0.99      1.00     41986
+
+    accuracy                           1.00    139953
+   macro avg       1.00      1.00      1.00    139953
+weighted avg       1.00      1.00      1.00    139953
+
+
+Model and scaler saved to: d:\6.pythoncode\visualcode\DA1.fashion\fashion_model_output\20251210_223625
+
+Training pipeline finished in 391.55 seconds
+
+ TRAINING COMPLETE 
+
