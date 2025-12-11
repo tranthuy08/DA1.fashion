@@ -1,5 +1,5 @@
 """
-Fashion Trend Prediction System - Streamlit App (Fixed Version)
+Fashion Trend Prediction System - Streamlit App 
 """
 
 import streamlit as st
@@ -104,8 +104,7 @@ def main():
 
     page = st.sidebar.radio("Navigation", [
         "📊 Overview",
-        "📈 EDA Report",
-        "🔍 Data Analysis",
+        "📈 Data Insights",
         "🤖 Model Performance",
         "🎨 Trend Insights",
         "🔮 Make Predictions"
@@ -113,6 +112,14 @@ def main():
 
     st.sidebar.markdown("---")
     st.sidebar.info("Uses CatBoost. Data: product attributes, ratings, social engagement, price.")
+    st.markdown("### 👥 Team Members")
+    st.markdown(
+        """
+        **Nguyễn Thị Ngọc Khuê** – 2321050112  
+        **Phạm Thị Thanh** – 2321050063  
+        **Trần Thị Thúy** – 2321050089  
+        """
+    )
 
     with st.spinner("Loading data..."):
         raw_df, df, scaler_params = load_raw_and_generated()
@@ -122,10 +129,8 @@ def main():
 
     if page == "📊 Overview":
         page_overview(raw_df, df, metrics)
-    elif page == "📈 EDA Report":
+    elif page == "📈 Data Insights":
         page_eda(raw_df, df)
-    elif page == "🔍 Data Analysis":
-        page_data_analysis(df)
     elif page == "🤖 Model Performance":
         page_model_performance(metrics, feature_importance)
     elif page == "🎨 Trend Insights":
@@ -164,17 +169,21 @@ def page_overview(raw_df, df, metrics):
     st.write(f"ROC-AUC: {roc:.4f}" if roc is not None else "ROC-AUC: N/A")
 
 def page_eda(raw_df, df):
-    st.markdown('<div class="sub-header">📈 EDA Report</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">📊 Data Exploration & Trend Analysis</div>', unsafe_allow_html=True)
     sns.set(style="whitegrid")
     figsize = (config.CHART_WIDTH / 100, config.CHART_HEIGHT / 100)
+
+    # 1. Dataset Summary
+    st.subheader("📁 Dataset Overview")
 
     st.write("Dataset shape (raw):", raw_df.shape)
     st.write("Missing values (raw):")
     st.dataframe(raw_df.isnull().sum().sort_values(ascending=False).to_frame("missing_count"))
 
-    # Sidebar filters
-    st.sidebar.markdown("### EDA Filters")
-    trend_options = ['All'] + df['Trend'].unique().tolist() if 'Trend' in df.columns else ['All', 0, 1]
+    # 2. Filters 
+    st.sidebar.markdown("### 🔎 Filters")
+
+    trend_options = ['All'] + df['Trend'].unique().tolist() if 'Trend' in df.columns else ['All']
     trend_filter = st.sidebar.selectbox("Filter by Trend", options=trend_options, index=0)
 
     categories = ['All'] + df['category'].unique().tolist() if 'category' in df.columns else ['All']
@@ -186,35 +195,39 @@ def page_eda(raw_df, df):
     seasons = ['All'] + df['season'].unique().tolist() if 'season' in df.columns else ['All']
     season_filter = st.sidebar.selectbox("Filter by Season", options=seasons, index=0)
 
-    # Apply filters
     df_filtered = df.copy()
+
     if trend_filter != 'All' and 'Trend' in df.columns:
         df_filtered = df_filtered[df_filtered['Trend'] == trend_filter]
-    if category_filter != 'All' and 'category' in df_filtered.columns:
+
+    if category_filter != 'All':
         df_filtered = df_filtered[df_filtered['category'] == category_filter]
-    if brand_filter != 'All' and 'brand' in df_filtered.columns:
+
+    if brand_filter != 'All':
         df_filtered = df_filtered[df_filtered['brand'] == brand_filter]
-    if season_filter != 'All' and 'season' in df_filtered.columns:
+
+    if season_filter != 'All':
         df_filtered = df_filtered[df_filtered['season'] == season_filter]
 
-    # Distribution of rating (raw)
+    # 3. Basic EDA 
+    st.subheader("📈 Basic Data Exploration")
+
+    # Rating distribution
     if 'rating' in raw_df.columns:
-        st.markdown("Distribution of Ratings")
+        st.markdown("### Rating Distribution")
         fig, ax = plt.subplots(figsize=figsize)
         sns.histplot(raw_df['rating'].dropna(), bins=30, kde=True, ax=ax)
         st.pyplot(fig)
         plt.close(fig)
 
-    # Top Categories & Brands Charts
-    st.write("### Top Categories & Brands")
+    # Top categories & brands
+    st.markdown("### Top Categories & Brands")
     c1, c2 = st.columns(2)
-    
+
     if 'category' in df_filtered.columns:
         top_categories = df_filtered['category'].value_counts().head(config.TOP_N)
         fig, ax = plt.subplots(figsize=(8, 5))
         sns.barplot(x=top_categories.index, y=top_categories.values, palette="Set3", ax=ax)
-        ax.set_xlabel("Category")
-        ax.set_ylabel("Count")
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
         c1.pyplot(fig)
         plt.close(fig)
@@ -223,8 +236,6 @@ def page_eda(raw_df, df):
         top_brands = df_filtered['brand'].value_counts().head(config.TOP_N)
         fig, ax = plt.subplots(figsize=(8, 5))
         sns.barplot(x=top_brands.index, y=top_brands.values, palette="Set2", ax=ax)
-        ax.set_xlabel("Brand")
-        ax.set_ylabel("Count")
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
         c2.pyplot(fig)
         plt.close(fig)
@@ -257,14 +268,20 @@ def page_eda(raw_df, df):
         c2.write("**Top Brands Table**")
         c2.dataframe(top_brands_df, use_container_width=True)
 
-    # Word clouds 
-    st.markdown("Word Clouds")
+    # Word Clouds
+    st.subheader("☁ Word Clouds")
     text_cols = [c for c in config.TEXT_COLUMNS if c in raw_df.columns]
+
     if text_cols:
         for col in text_cols:
             text = " ".join(raw_df[col].dropna().astype(str).values)
             if text.strip():
-                wc = WordCloud(width=int(config.CHART_WIDTH), height=int(config.CHART_HEIGHT/2), background_color="white").generate(text)
+                wc = WordCloud(
+                    width=int(config.CHART_WIDTH),
+                    height=int(config.CHART_HEIGHT/2),
+                    background_color="white"
+                ).generate(text)
+
                 fig, ax = plt.subplots(figsize=(config.CHART_WIDTH/100, config.CHART_HEIGHT/100))
                 ax.imshow(wc, interpolation="bilinear")
                 ax.axis("off")
@@ -272,56 +289,45 @@ def page_eda(raw_df, df):
                 st.pyplot(fig)
                 plt.close(fig)
     else:
-        st.info("No textual columns for wordclouds.")
+        st.info("No textual columns available for wordclouds.")
 
-    # Sample rows
+    # 4. Trend Analysis
     st.markdown("---")
-    st.write("### Sample Rows")
-    raw_filtered = raw_df.copy()
+    st.subheader("📊 Trend Analysis")
 
-    if trend_filter != 'All' and 'Trend' in df.columns:
-        trend_idx = df[df['Trend'] == trend_filter].index
-        raw_filtered = raw_filtered.loc[trend_idx]
-
-    if category_filter != 'All':
-        raw_filtered = raw_filtered[raw_filtered['category'] == category_filter]
-
-    if brand_filter != 'All':
-        raw_filtered = raw_filtered[raw_filtered['brand'] == brand_filter]
-
-    if season_filter != 'All':
-        raw_filtered = raw_filtered[raw_filtered['season'] == season_filter]
-
-    st.dataframe(raw_filtered.head(30), use_container_width=True)
-
-
-
-def page_data_analysis(df):
-    st.markdown('<div class="sub-header">🔍 Data Analysis</div>', unsafe_allow_html=True)
+    # Trend distribution
     try:
-        st.plotly_chart(viz.plot_trend_distribution(df), use_container_width=True)
-    except Exception as e:
-        st.error(f"Plot error: {e}")
+        st.plotly_chart(viz.plot_trend_distribution(df_filtered), use_container_width=True)
+    except:
+        pass
 
     col1, col2 = st.columns(2)
+
+    # Color Trend
     with col1:
         try:
-            st.plotly_chart(viz.plot_color_trends(df), use_container_width=True)
-        except Exception:
+            st.plotly_chart(viz.plot_color_trends(df_filtered), use_container_width=True)
+        except:
             pass
-        try:
-            st.plotly_chart(viz.plot_brand_trends(df), use_container_width=True)
-        except Exception:
-            pass
+
+    # Style Trends & Seasonal Trends
     with col2:
         try:
-            st.plotly_chart(viz.plot_style_trends(df), use_container_width=True)
-        except Exception:
+            st.plotly_chart(viz.plot_style_trends(df_filtered), use_container_width=True)
+        except:
             pass
         try:
-            st.plotly_chart(viz.plot_seasonal_trends(df), use_container_width=True)
-        except Exception:
+            st.plotly_chart(viz.plot_seasonal_trends(df_filtered), use_container_width=True)
+        except:
             pass
+
+    # 5. Sample Rows
+    st.markdown("---")
+    st.subheader("📋 Sample Rows")
+
+    raw_filtered = raw_df.loc[df_filtered.index]
+    st.dataframe(raw_filtered.head(30), use_container_width=True)
+
 
 def page_model_performance(metrics, feature_importance):
     st.markdown('<div class="sub-header">🤖 Model Performance</div>', unsafe_allow_html=True)
