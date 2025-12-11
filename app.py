@@ -112,8 +112,8 @@ def main():
 
     st.sidebar.markdown("---")
     st.sidebar.info("Uses CatBoost. Data: product attributes, ratings, social engagement, price.")
-    st.markdown("### 👥 Team Members")
-    st.markdown(
+    st.sidebar.markdown("### 👥 Team Members")
+    st.sidebar.markdown(
         """
         **Nguyễn Thị Ngọc Khuê** – 2321050112  
         **Phạm Thị Thanh** – 2321050063  
