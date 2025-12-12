@@ -357,9 +357,9 @@ def page_model_performance(metrics, feature_importance):
         st.text(metrics.get('classification_report', 'N/A'))
         try:
             st.plotly_chart(viz.plot_feature_importance(feature_importance), use_container_width=True)
-            st.dataframe(feature_importance.head(15), use_container_width=True)
+            st.dataframe(feature_importance.head(10), use_container_width=True)
         except Exception:
-            st.write(feature_importance.head(15))
+            st.write(feature_importance.head(10))
 
 def page_trend_insights(raw_df, df, feature_importance):
     st.markdown('<div class="sub-header">🎨 Trend Insights</div>', unsafe_allow_html=True)
@@ -499,3 +499,4 @@ def page_predictions(predictor, scaler_params):
 
 if __name__ == "__main__":
     main()
+
