@@ -20,6 +20,7 @@ import visualization as viz
 import config
 
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 
 # Streamlit page config
 st.set_page_config(page_title="Fashion Trend Prediction System", page_icon="👗", layout="wide")
@@ -85,6 +86,13 @@ def train_and_get_model(df):
     predictor.train(X_train, y_train, X_val=X_test, y_val=y_test, cat_features_idx=cat_idx)
 
     test_metrics = predictor.evaluate(X_test, y_test)
+    y_pred = predictor.model.predict(X_test)
+
+    test_metrics['classification_report'] = classification_report(
+        y_test,
+        y_pred,
+        output_dict=True
+    )
     # try add roc_auc
     try:
         from sklearn.metrics import roc_auc_score
@@ -354,7 +362,20 @@ def page_model_performance(metrics, feature_importance):
         except Exception:
             st.write(metrics.get('confusion_matrix', 'N/A'))
     with right:
-        st.text(metrics.get('classification_report', 'N/A'))
+        report = metrics.get('classification_report')
+
+        if isinstance(report, dict):
+            report_df = (
+                pd.DataFrame(report)
+                .transpose()
+                .round(4)
+                .reset_index()
+                .rename(columns={'index': 'Class'})
+            )
+            st.subheader("📋 Classification Report")
+            st.dataframe(report_df, use_container_width=True)
+        else:
+            st.write(report)
         try:
             st.plotly_chart(viz.plot_feature_importance(feature_importance), use_container_width=True)
             st.dataframe(feature_importance.head(10), use_container_width=True)
@@ -499,4 +520,3 @@ def page_predictions(predictor, scaler_params):
 
 if __name__ == "__main__":
     main()
-
