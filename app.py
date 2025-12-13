@@ -439,7 +439,7 @@ def page_predictions(predictor, scaler_params):
     season = st.selectbox("Season", options=config.SEASONS)
     category = st.selectbox("Category", options=config.CATEGORIES)
 
-    price = st.number_input("Price ($)", min_value=0.0, value=100.0, step=1)
+    price = st.number_input("Price ($)", min_value=0.0, value=100, step=1)
     rating = st.slider("Rating", min_value=1.0, max_value=5.0, value=4.0, step=0.1)
     reviews_count = st.number_input("Review count", min_value=0, value=10, step=1)
     age = st.number_input("Customer age", min_value=0, value=25, step=1)
@@ -517,5 +517,6 @@ def page_predictions(predictor, scaler_params):
 
 if __name__ == "__main__":
     main()
+
 
 
