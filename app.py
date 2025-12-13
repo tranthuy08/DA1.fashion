@@ -384,7 +384,6 @@ def page_model_performance(metrics, feature_importance):
 
 def page_trend_insights(raw_df, df, feature_importance):
     st.markdown('<div class="sub-header">🎨 Trend Insights</div>', unsafe_allow_html=True)
-    # Use df to get Trend index, but compute averages on raw_df to get original units
     if 'Trend' not in df.columns:
         st.info("Trend labels missing.")
         return
@@ -395,7 +394,7 @@ def page_trend_insights(raw_df, df, feature_importance):
     trending_raw = raw_df.loc[trending_idx] if not raw_df.empty else pd.DataFrame()
     non_raw = raw_df.loc[non_idx] if not raw_df.empty else pd.DataFrame()
 
-    st.markdown("Top colors/styles/brands among trending (raw counts):")
+    st.markdown("Top colors/styles/brands among trending:")
     c1, c2, c3 = st.columns(3)
     if 'color' in raw_df.columns:
         c1.write(raw_df.loc[trending_idx, 'color'].value_counts().head(10))
@@ -405,7 +404,7 @@ def page_trend_insights(raw_df, df, feature_importance):
         c3.write(raw_df.loc[trending_idx, 'brand'].value_counts().head(10))
 
     st.markdown("---")
-    st.markdown("Statistical Summary (use raw values):")
+    st.markdown("Statistical Summary:")
     cols_left, cols_right = st.columns(2)
     with cols_left:
         st.write("Trending items averages")
@@ -415,7 +414,7 @@ def page_trend_insights(raw_df, df, feature_importance):
                 "avg_rating": float(trending_raw['rating'].mean()) if 'rating' in trending_raw.columns else None
             })
         else:
-            st.write("No trending items (raw).")
+            st.write("No trending items.")
     with cols_right:
         st.write("Non-trending items averages")
         if not non_raw.empty:
@@ -424,7 +423,7 @@ def page_trend_insights(raw_df, df, feature_importance):
                 "avg_rating": float(non_raw['rating'].mean()) if 'rating' in non_raw.columns else None
             })
         else:
-            st.write("No non-trending items (raw).")
+            st.write("No non-trending items.")
 
     st.markdown("---")
     st.write("Top model features (from feature importance):")
@@ -433,7 +432,7 @@ def page_trend_insights(raw_df, df, feature_importance):
 def page_predictions(predictor, scaler_params):
     st.markdown('<div class="sub-header">🔮 Make Predictions</div>', unsafe_allow_html=True)
 
-    # Use options from config where possible
+    # Use options from config 
     color = st.selectbox("Color", options=config.COLORS)
     style = st.selectbox("Style Attribute", options=config.STYLE_ATTRIBUTES)
     brand = st.selectbox("Brand", options=config.BRANDS)
@@ -446,8 +445,6 @@ def page_predictions(predictor, scaler_params):
     age = st.number_input("Customer age", min_value=0, value=25, step=1)
     total_sizes = st.number_input("Total sizes available", min_value=1, value=5, step=1)
     size = st.selectbox("Size", options=config.SIZES)
-
-    # Fields previously text now selectboxes
     description = st.selectbox("Description", options=config.DESCRIPTIONS)
     purchase_history = st.selectbox("Purchase history", options=config.PURCHASE_HISTORY)
     fashion_magazines = st.selectbox("Fashion magazines mentioned", options=config.FASHION_MAGAZINES)
@@ -520,3 +517,4 @@ def page_predictions(predictor, scaler_params):
 
 if __name__ == "__main__":
     main()
+
